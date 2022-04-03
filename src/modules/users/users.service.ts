@@ -12,6 +12,10 @@ export class UsersService {
     return this.prisma.user.findMany({});
   }
 
+  findOne(email: string): Promise<User> {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
   save(data: UserDto): Promise<Omit<User, 'password'>> {
     return this.prisma.user.create({ data });
   }

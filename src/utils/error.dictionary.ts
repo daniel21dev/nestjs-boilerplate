@@ -23,6 +23,16 @@ export const Errors = errorsType({
     description: 'Unauthorized.',
     type: Response,
   },
+  USER_NOT_FOUND: {
+    status: 404,
+    description: 'user not found',
+    type: Response,
+  },
+  EMAIL_NOT_AVAILABLE: {
+    status: 400,
+    description: 'the email is already registered',
+    type: Response,
+  },
 });
 
 export const NotTypeError = (error: ApiResponse): Omit<ApiResponse, 'type'> => {

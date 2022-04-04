@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Res, Logger } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Res,
+  Logger,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
@@ -7,6 +15,8 @@ import { Errors, NotTypeError } from '../../utils/error.dictionary';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Success } from '../../utils/success.dictionary';
 import { CommonErrorsResponses } from '../../utils/decorators/commonErrors.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Req } from '@nestjs/common';
 
 @Controller('users')
 @ApiTags('users')
@@ -24,6 +34,12 @@ export class UsersController {
       return u;
     });
     res.status(Success.GET_USERS.status).send(safeUsers);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/profile')
+  getProfile(@Req() req) {
+    return req.user;
   }
 
   @Post('/')

@@ -1,4 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  Logger,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { Errors } from './error.dictionary';
 import { ControlledError } from '../entities/controlledError.entiti';
@@ -18,7 +24,11 @@ export class ErrorsFilter<T> implements ExceptionFilter {
         .status(errorResponse.status)
         .send({ ...errorResponse, message });
     }
-
+    if (exception instanceof HttpException) {
+      return response
+        .status(exception.getStatus())
+        .send(exception.getResponse());
+    }
     return response
       .status(Errors.UNKNOWN_ERROR.status)
       .json(Errors.UNKNOWN_ERROR);

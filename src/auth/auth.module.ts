@@ -7,15 +7,17 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
     PrismaModule,
     PassportModule,
+    ConfigModule,
     JwtModule.register({
-      secret: 'secreta',
-      signOptions: { expiresIn: '60s' },
+      secret: new ConfigService().get('JWT_SECRET'),
+      signOptions: { expiresIn: '1d' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

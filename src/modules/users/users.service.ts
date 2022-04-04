@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../shared/prisma/prisma.service';
 import { UserDto } from './dto/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +17,8 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  save(data: UserDto): Promise<Omit<User, 'password'>> {
-    return this.prisma.user.create({ data });
+  async save(data: UserDto): Promise<Omit<User, 'password'>> {
+    const password = await bcrypt.hash(data.password, 10);
+    return this.prisma.user.create({ data: { ...data, password } });
   }
 }

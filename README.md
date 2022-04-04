@@ -1,1 +1,1 @@
-Nestjs project whit, prisma, swagger and best practices preconfigured
+Nestjs project whit, prisma, config, swagger, jwt, and best practices preconfigured

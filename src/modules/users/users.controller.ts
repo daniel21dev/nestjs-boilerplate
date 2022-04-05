@@ -26,6 +26,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('/')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse(Success.GET_USERS)
   async getUsers(@Res() res: Response): Promise<void> {
     const users = await this.usersService.get();
@@ -36,10 +37,11 @@ export class UsersController {
     res.status(Success.GET_USERS.status).send(safeUsers);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/profile')
-  getProfile(@Req() req) {
-    return req.user;
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse(Success.GET_PROFILE)
+  getProfile(@Req() req, @Res() res: Response): void {
+    res.status(Success.GET_PROFILE.status).send(req.user);
   }
 
   @Post('/')
@@ -54,6 +56,7 @@ export class UsersController {
       );
     }
     const user = await this.usersService.save(dto);
+    delete user.password;
     res.status(Success.REGISTER_USER.status).send(user);
   }
 }

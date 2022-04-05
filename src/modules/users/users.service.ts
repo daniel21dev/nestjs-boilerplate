@@ -17,7 +17,7 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async save(data: UserDto): Promise<Omit<User, 'password'>> {
+  async save(data: UserDto): Promise<User> {
     const password = await bcrypt.hash(data.password, 10);
     return this.prisma.user.create({ data: { ...data, password } });
   }

@@ -1,11 +1,7 @@
-import { ApiResponse } from '../entities/response.entity';
 import { User } from 'src/modules/users/entities/user.entity';
+import { apiResponses } from '../entities/responses.entity';
 
-function succesType<T extends Record<string, ApiResponse>>(arg: T): T {
-  return arg;
-}
-
-export const Success = succesType({
+export const Success = apiResponses({
   WELCOME_MESSAGE: {
     status: 200,
     description: 'Welcome message.',
@@ -14,6 +10,7 @@ export const Success = succesType({
     status: 201,
     description: 'gets the users.',
     type: [User],
+    isArray: true,
   },
   REGISTER_USER: {
     status: 201,

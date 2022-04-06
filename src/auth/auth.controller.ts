@@ -3,10 +3,9 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Success } from '../utils/success.dictionary';
-import { CommonErrorsResponses } from '../utils/decorators/commonErrors.decorator';
 import { LoginDto } from './dto/login.dto';
 import { Resp } from '../shared/types/resp';
+import { Success, CommonErrorsResponses } from '../utils';
 
 @ApiTags('auth')
 @Controller('auth')

@@ -11,13 +11,16 @@ import { Response } from 'express';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { ControlledError } from '../../entities/controlledError.entiti';
-import { Errors, NotTypeError } from '../../utils/error.dictionary';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Success } from '../../utils/success.dictionary';
-import { CommonErrorsResponses } from '../../utils/decorators/commonErrors.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Req } from '@nestjs/common';
 import { Resp } from '../../shared/types/resp';
+import {
+  Success,
+  Errors,
+  NotTypeError,
+  CommonErrorsResponses,
+} from '../../utils';
 
 @Controller('users')
 @ApiTags('users')

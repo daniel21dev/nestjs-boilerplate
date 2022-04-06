@@ -12,7 +12,7 @@ import {
 import { Response } from 'express';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
-import { ControlledError } from '../../entities/controlledError.entiti';
+import { ControlledError } from '../../entities/controlledError.entity';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Req } from '@nestjs/common';

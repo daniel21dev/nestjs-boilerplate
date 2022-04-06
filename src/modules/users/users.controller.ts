@@ -17,6 +17,7 @@ import { Success } from '../../utils/success.dictionary';
 import { CommonErrorsResponses } from '../../utils/decorators/commonErrors.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Req } from '@nestjs/common';
+import { Resp } from '../../shared/types/resp';
 
 @Controller('users')
 @ApiTags('users')
@@ -28,7 +29,7 @@ export class UsersController {
   @Get('/')
   @UseGuards(JwtAuthGuard)
   @ApiResponse(Success.GET_USERS)
-  async getUsers(@Res() res: Response): Promise<void> {
+  async getUsers(@Res() res: Response): Resp {
     const users = await this.usersService.get();
     const safeUsers = users.map((u) => {
       delete u.password;
@@ -47,7 +48,7 @@ export class UsersController {
   @Post('/')
   @ApiResponse(Success.REGISTER_USER)
   @ApiResponse(NotTypeError(Errors.EMAIL_NOT_AVAILABLE))
-  async saveUser(@Res() res: Response, @Body() dto: UserDto): Promise<void> {
+  async saveUser(@Res() res: Response, @Body() dto: UserDto): Resp {
     const userExists = await this.usersService.findOne(dto.email);
     if (userExists) {
       throw new ControlledError(

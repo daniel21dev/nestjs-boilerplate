@@ -6,6 +6,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Success } from '../utils/success.dictionary';
 import { CommonErrorsResponses } from '../utils/decorators/commonErrors.decorator';
 import { LoginDto } from './dto/login.dto';
+import { Resp } from '../shared/types/resp';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -20,7 +21,7 @@ export class AuthController {
     @Res() res: Response,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() dto: LoginDto, // needed for swagger docs
-  ): Promise<void> {
+  ): Resp {
     const payload = await this.authService.login(req.user);
     res.status(Success.LOGIN_USER.status).send(payload);
   }

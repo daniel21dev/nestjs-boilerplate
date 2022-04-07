@@ -6,7 +6,7 @@ export class UserDto implements Omit<User, 'id'> {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  @Length(6, 30)
+  @Length(3, 30)
   name: string;
   @IsString()
   @IsNotEmpty()

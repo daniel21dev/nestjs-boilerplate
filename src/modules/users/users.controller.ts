@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   Res,
   Logger,
   UseGuards,
@@ -11,20 +10,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
-import { ControlledError } from '../../entities/controlledError.entity';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Req } from '@nestjs/common';
 import { Resp } from '../../shared/types/resp';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcrypt';
-import {
-  Success,
-  Errors,
-  NotTypeError,
-  CommonErrorsResponses,
-} from '../../utils';
+import { Success, Errors, CommonErrorsResponses } from '../../utils';
 
 @Controller('users')
 @ApiTags('users')
@@ -50,23 +41,6 @@ export class UsersController {
   @ApiResponse(Success.GET_PROFILE)
   getProfile(@Req() req, @Res() res: Response): void {
     res.status(Success.GET_PROFILE.status).send(req.user);
-  }
-
-  @Post('/')
-  @ApiResponse(Success.REGISTER_USER)
-  @ApiResponse(NotTypeError(Errors.EMAIL_NOT_AVAILABLE))
-  async saveUser(@Res() res: Response, @Body() dto: UserDto): Resp {
-    const userExists = await this.usersService.findOne(dto.email);
-    if (userExists) {
-      throw new ControlledError(
-        Errors.EMAIL_NOT_AVAILABLE,
-        `the email: ${dto.email} is not available, choose another`,
-      );
-    }
-    const password = await bcrypt.hash(dto.password, 10);
-    const user = await this.usersService.save({ ...dto, password });
-    delete user.password;
-    res.status(Success.REGISTER_USER.status).send(user);
   }
 
   @Put('/:id')

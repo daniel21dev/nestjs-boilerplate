@@ -4,28 +4,28 @@ import {
   Get,
   Res,
   Logger,
-  UseGuards,
   Put,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UsersService } from './users.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { Req } from '@nestjs/common';
 import { Resp } from '../../shared/types/resp';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Success, Errors, CommonErrorsResponses } from '../../utils';
+import { JwtDecorators } from '../../utils/decorators/jwt.decorator';
 
 @Controller('users')
 @ApiTags('users')
+@JwtDecorators()
 @CommonErrorsResponses()
 export class UsersController {
   private logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
   @Get('/')
-  @UseGuards(JwtAuthGuard)
   @ApiResponse(Success.GET_USERS)
   async getUsers(@Res() res: Response): Resp {
     const users = await this.usersService.get();
@@ -37,7 +37,6 @@ export class UsersController {
   }
 
   @Get('/profile')
-  @UseGuards(JwtAuthGuard)
   @ApiResponse(Success.GET_PROFILE)
   getProfile(@Req() req, @Res() res: Response): void {
     res.status(Success.GET_PROFILE.status).send(req.user);
@@ -48,7 +47,7 @@ export class UsersController {
   async updateUser(
     @Res() res: Response,
     @Body() dto: UpdateUserDto,
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
   ): Resp {
     const userExists = this.usersService.findById(+id);
     if (!userExists)
@@ -56,7 +55,8 @@ export class UsersController {
         ...Errors.USER_NOT_FOUND,
         message: `the user with id: ${id} does not exists`,
       });
-    const user = await this.usersService.update(id, dto);
+    const user = await this.usersService.update(+id, dto);
+    delete user.password;
     res.status(Success.UPDATE_USER.status).send(user);
   }
 }

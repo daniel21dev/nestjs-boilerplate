@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { Errors } from './error.dictionary';
-import { ControlledError } from '../entities/controlledError.entiti';
+import { ControlledError } from '../entities/controlledError.entity';
 
 @Catch()
 export class ErrorsFilter<T> implements ExceptionFilter {

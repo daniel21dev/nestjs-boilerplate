@@ -24,6 +24,11 @@ export const Success = apiResponses({
     description: 'User Registered successfully.',
     type: User,
   },
+  UPDATE_USER: {
+    status: 200,
+    description: 'User updated successfully.',
+    type: User,
+  },
   LOGIN_USER: {
     status: 200,
     description: 'Returns a jwt access token.',

@@ -12,6 +12,7 @@ model User {
   email    String @unique
   password String
   name     String
+  role     ROLE   @default(BASIC)
   posts    Post[]
 }
 
@@ -22,4 +23,9 @@ model Post {
   published Boolean? @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+}
+
+enum ROLE {
+  ADMIN
+  BASIC
 }

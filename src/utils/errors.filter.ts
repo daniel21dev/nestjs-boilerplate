@@ -17,7 +17,6 @@ export class ErrorsFilter<T> implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     this.logger.error(exception);
-
     if (exception instanceof ControlledError) {
       const { errorResponse, message } = exception;
       return response

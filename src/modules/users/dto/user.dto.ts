@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
-export class UserDto implements Omit<User, 'id'> {
+export class UserDto implements Omit<User, 'id' | 'role'> {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()

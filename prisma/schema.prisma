@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -12,6 +16,7 @@ model User {
   email    String @unique
   password String
   name     String
+  role     ROLE   @default(BASIC)
   posts    Post[]
 }
 
@@ -22,4 +27,9 @@ model Post {
   published Boolean? @default(false)
   author    User?    @relation(fields: [authorId], references: [id])
   authorId  Int?
+}
+
+enum ROLE {
+  ADMIN
+  BASIC
 }

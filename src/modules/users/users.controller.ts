@@ -16,6 +16,7 @@ import { Resp } from '../../shared/types/resp';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Success, Errors, CommonErrorsResponses } from '../../utils';
 import { JwtDecorators } from '../../utils/decorators/jwt.decorator';
+import { ControlledError } from '../../entities/controlledError.entity';
 
 @Controller('users')
 @ApiTags('users')
@@ -49,12 +50,24 @@ export class UsersController {
     @Body() dto: UpdateUserDto,
     @Param('id', ParseIntPipe) id: number,
   ): Resp {
-    const userExists = this.usersService.findById(+id);
-    if (!userExists)
-      return res.status(Errors.USER_NOT_FOUND.status).send({
-        ...Errors.USER_NOT_FOUND,
-        message: `the user with id: ${id} does not exists`,
-      });
+    const userExists = await this.usersService.findById(+id);
+    if (!userExists) {
+      throw new ControlledError(
+        Errors.USER_NOT_FOUND,
+        `the user with id: ${id} does not exists`,
+      );
+    }
+
+    if (dto.email) {
+      const emailExists = await this.usersService.findOne(dto.email);
+      if (emailExists) {
+        throw new ControlledError(
+          Errors.EMAIL_NOT_AVAILABLE,
+          `the email: ${dto.email} is not available`,
+        );
+      }
+    }
+
     const user = await this.usersService.update(+id, dto);
     delete user.password;
     res.status(Success.UPDATE_USER.status).send(user);

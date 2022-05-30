@@ -13,6 +13,7 @@ class Response {
 class ApiResponse {
   status: number;
   description: string;
+  name?: string;
   type?: Type<unknown> | Function | [Function] | string | unknown[];
 }
 

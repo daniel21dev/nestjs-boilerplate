@@ -1,4 +1,4 @@
-import { User } from 'src/modules/users/entities/user.entity';
+import { User } from '../modules/users/entities/user.entity';
 import { apiResponses } from '../entities/responses.entity';
 import { LoginResponse } from '../auth/entities/login-response';
 

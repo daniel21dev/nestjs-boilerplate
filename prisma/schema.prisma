@@ -6,6 +6,11 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
+generator crud {
+  provider = "crud-class-generator"
+  output   = "./crud-classes"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
